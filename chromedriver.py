@@ -62,13 +62,27 @@ def get_all_events():
 		
 		print "event_id:   " + link[len(link)-1]
 		print "event_name: " + run.get_attribute("innerHTML").strip()
+		get_event_range(link[len(link)-1])
 		print ""
+
+def get_event_range(event_id):
+	browser.get('https://gamesdonequick.com/tracker/donations/' + event_id)
+
+	event_range = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[1]/td[2]')
+	print "ended_at:   " + event_range.text.encode('utf-8').strip()
+	all_events = browser.find_elements_by_xpath('/html/body/div[1]/p[1]/a[contains(@class, \'last\')]')
+	rubbish, final = all_events[0].get_attribute("href").strip().split("=")
+
+	browser.get('https://gamesdonequick.com/tracker/donations/%s?page=%s' % (event_id, final))
+	all_runs = browser.find_elements_by_tag_name('tr')
+	last = len(all_runs)-1
+	event_range = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[2]' % last)
+	print "started_at: " + event_range.text.encode('utf-8').strip()
 
 def get_all_users():
 	browser.get('https://gamesdonequick.com/tracker/donors/')
 	all_events = browser.find_elements_by_xpath('/html/body/div[1]/p[1]/a[contains(@class, \'last\')]')
 	rubbish, final = all_events[0].get_attribute("href").strip().split("=")
-	print final
 	for i in range(0, int(final)):
 		get_user_by_page(i+1)
 
@@ -143,5 +157,23 @@ def get_tags(description, title):
 
 	return tag_list
 
-get_all_users()
+get_all_events()
 browser.close()
+
+# all donors
+# all events
+# 
+# all runs
+#  --when runners, connect to donors or create "donor"
+#    --connect runners_to_runs
+#  --when tags, create "tag"
+#    --connect tags_to_runs
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
