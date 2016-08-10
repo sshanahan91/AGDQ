@@ -64,7 +64,29 @@ def get_all_events():
 		print "event_name: " + run.get_attribute("innerHTML").strip()
 		print ""
 
+def get_all_users():
+	browser.get('https://gamesdonequick.com/tracker/donors/')
+	all_events = browser.find_elements_by_xpath('/html/body/div[1]/p[1]/a[contains(@class, \'last\')]')
+	rubbish, final = all_events[0].get_attribute("href").strip().split("=")
+	print final
+	for i in range(0, int(final)):
+		get_user_by_page(i+1)
+
+def get_user_by_page(page):
+	browser.get('https://gamesdonequick.com/tracker/donors/?page=' + str(page))
+
+	all_runs = browser.find_elements_by_tag_name('tr')
+	for i in range(1, len(all_runs)):
+		run = browser.find_elements_by_xpath('//table/tbody/tr[%d]/td' % i)
+		run_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
+		link = run_link.get_attribute("href").split("/")
+		print "user_id: " + link[len(link)-2]
+		print "name:    " + run[0].text.encode('utf-8').strip()
+		print "alias:   " + run[1].text.encode('utf-8').strip()
+
+
 def get_runners(runners_webelem):
+	# "None" still considered a runner.
 	return [final.strip() for final in runners_webelem.text.encode('utf-8').split(',')]
 
 def get_tags(description, title):
@@ -121,5 +143,5 @@ def get_tags(description, title):
 
 	return tag_list
 
-get_runs_by_event('agdq2016')
+get_all_users()
 browser.close()
