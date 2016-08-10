@@ -13,13 +13,18 @@ def get_all_runs(url):
 
 	for i in range(1, len(all_runs)):
 		run = browser.find_elements_by_xpath('//table/tbody/tr[%d]/td' % i)
-
-		print "Title:       " + run[0].text.encode('utf-8').strip()
-		print "Players:     " + run[1].text.encode('utf-8').strip()
-		print "Description: " + run[2].text.encode('utf-8').strip()
-		print "started_at:  " + run[3].text.encode('utf-8').strip()
-		print "ended_at:    " + run[4].text.encode('utf-8').strip()
-		print "bid_war:     " + run[5].text.encode('utf-8').strip()
+		run_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
+		link = run_link.get_attribute("href").split("/")
+		print "run_id:       " + link[len(link)-1]
+		print "event_id:     " + "--format needed--"
+		print "name:         " + run[0].text.encode('utf-8').strip()
+		print "game:         " + "--added later--"
+		print "youtube_link: " + "--added later--"
+		print "runners txt:  " + run[1].text.encode('utf-8').strip()
+		print "description:  " + run[2].text.encode('utf-8').strip()
+		print "started_at:   " + run[3].text.encode('utf-8').strip()
+		print "ended_at:     " + run[4].text.encode('utf-8').strip()
+		print "bid_war:      " + run[5].text.encode('utf-8').strip()
 		print ""
 
 
@@ -38,5 +43,5 @@ def get_all_events(url):
 		print ""
 
 
-get_all_events('runs')
+get_all_runs('runs')
 browser.close()
