@@ -26,13 +26,17 @@ def get_runs_by_event(event = None):
 		print "run_id:       " + link[len(link)-1]
 		print "event_id:     " + (event if event else "")
 		print "name:         " + run[0].text.encode('utf-8').strip()
-		print "game:         " + "--added later--"
-		print "youtube_link: " + "--added later--"
-		print "runners txt:  " + run[1].text.encode('utf-8').strip()
-		print "description:  " + run[2].text.encode('utf-8').strip()
 		print "started_at:   " + run[3].text.encode('utf-8').strip()
 		print "ended_at:     " + run[4].text.encode('utf-8').strip()
 		print "bid_war:      " + run[5].text.encode('utf-8').strip()
+		print "game:         " + "--added later--"
+		print "youtube_link: " + "--added later--"
+
+		# split full runner text by comma, remove all white space
+		runners = [final.strip() for final in run[1].text.encode('utf-8').split(',')]
+		# show list as a string seperated by slashes.
+		print "runners:      " + "/".join(runners)
+		print "description:  " + run[2].text.encode('utf-8').strip()
 		print ""
 
 
