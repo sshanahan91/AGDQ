@@ -102,7 +102,7 @@ def get_all_prizes():
 	browser.get('https://gamesdonequick.com/tracker/prizes')
 	all_prizes = browser.find_elements_by_tag_name('tr')
 
-	for i in range(1, len(all_prizes)-1):
+	for i in range(1, len(all_prizes)-1): #/html/body/div[1]/table/tbody/tr[129]/td[1]/a
 		prize_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
 		games_link = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[4]/a' % i)		
 		prize = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td' % i)
@@ -113,7 +113,9 @@ def get_all_prizes():
 		print "prize_id:   " + prize_id_link[len(prize_id_link)-1]
 		print "prize_name: " + prize[0].text.encode('utf-8').strip()
 		# need to try to link this to a user ID before putting in DB
-		print "contrib_by: " + prize[1].text.encode('utf-8').strip()
+		contrib_by = prize[1].text.encode('utf-8').strip()
+		has_winner = len(winner_id_link)
+		print "contrib_by: " + contrib_by
 		print "min_bid:    " + prize[2].text.encode('utf-8').strip()
 		print "category:   " + prize[4].text.encode('utf-8').strip()
 		print "image_link: " + (image_link if image_link else "")
@@ -125,6 +127,31 @@ def get_all_prizes():
 			winner_id_links = [(winner_id.get_attribute("href").split("/")) for winner_id in winner_id_link]
 			for each_id in winner_id_links:
 				print "winner_id/" + each_id[len(each_id)-2]
+
+		if (len(games_link) > 1):
+			browser.get('https://gamesdonequick.com/tracker/prize/' + prize_id_link[len(prize_id_link)-1])
+			if (contrib_by and has_winner):
+				all_games = browser.find_elements_by_xpath('/html/body/div[1]/table[3]/tbody/tr')
+			elif (contrib_by or has_winner):
+				all_games = browser.find_elements_by_xpath('/html/body/div[1]/table[2]/tbody/tr')
+			else:
+				all_games = browser.find_elements_by_xpath('/html/body/div[1]/table[1]/tbody/tr')
+
+			for i in range(2, len(all_games)+1):
+				if (contrib_by and has_winner):
+					prize_link = browser.find_element_by_xpath('/html/body/div[1]/table[3]/tbody/tr[%d]/td/a' % i)
+				elif (contrib_by or has_winner):
+					prize_link = browser.find_element_by_xpath('/html/body/div[1]/table[2]/tbody/tr[%d]/td/a' % i)
+				else:
+					prize_link = browser.find_element_by_xpath('/html/body/div[1]/table[1]/tbody/tr[%d]/td/a' % i)
+
+				prize_id_link = prize_link.get_attribute("href").split("/")
+				print "run_id/" + prize_id_link[len(prize_id_link)-1]
+			browser.get('https://gamesdonequick.com/tracker/prizes')
+		else:
+			game_id_link = games_link[0].get_attribute("href").split("/")
+			print "run_id/" + game_id_link[len(game_id_link)-1]
+
 		# if (len(games_link) > 1):
 		# 	print "multiple games"
 		# elif (len(games_link) == 0):
@@ -210,10 +237,10 @@ browser.close()
 #  --when tags, create "tag"
 #    --connect tags_to_runs
 # 
-# 
-# 
-# 
-# 
+# all prizes
+#   --when contributors, search and connect to donors, or create donor
+#   --when winners, connect prize_to_winner
+#   --when runs, connect prize_to_runs
 # 
 # 
 # 
