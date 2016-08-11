@@ -98,9 +98,47 @@ def get_user_by_page(page):
 		print "name:    " + run[0].text.encode('utf-8').strip()
 		print "alias:   " + run[1].text.encode('utf-8').strip()
 
+def get_all_prizes():
+	browser.get('https://gamesdonequick.com/tracker/prizes')
+	all_prizes = browser.find_elements_by_tag_name('tr')
+
+	for i in range(1, len(all_prizes)-1):
+		prize_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
+		games_link = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[4]/a' % i)		
+		prize = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td' % i)
+		prize_id_link = prize_link.get_attribute("href").split("/")
+		image_link = prize[5].get_attribute("href")
+		winner_id_link = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[7]/a' % i)		
+		###winner_id_link = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[659]/td[7]/a')		
+		print "prize_id:   " + prize_id_link[len(prize_id_link)-1]
+		print "prize_name: " + prize[0].text.encode('utf-8').strip()
+		# need to try to link this to a user ID before putting in DB
+		print "contrib_by: " + prize[1].text.encode('utf-8').strip()
+		print "min_bid:    " + prize[2].text.encode('utf-8').strip()
+		print "category:   " + prize[4].text.encode('utf-8').strip()
+		print "image_link: " + (image_link if image_link else "")
+
+		if (len(winner_id_link) == 1):
+			winner_id_links = [(winner_id.get_attribute("href").split("/"))[len(winner_id_link)-3] for winner_id in winner_id_link]
+			print "winner_id/" + winner_id_links[0]
+		if (len(winner_id_link) > 1):
+			winner_id_links = [(winner_id.get_attribute("href").split("/")) for winner_id in winner_id_link]
+			for each_id in winner_id_links:
+				print "winner_id/" + each_id[len(each_id)-2]
+		# if (len(games_link) > 1):
+		# 	print "multiple games"
+		# elif (len(games_link) == 0):
+		# 	print "grand prize"
+		# else:
+		# 	game = games_link[0].get_attribute("href").split("/")
+		# 	print "run_id/" + game[len(link)-1] + "\tprize_id/" + link[len(link)-1]
+		
+		print ""
+
 
 def get_runners(runners_webelem):
-	# "None" still considered a runner.
+	# "None" still considered a runner. " and " still gives runner
+	#  information concatenated.
 	return [final.strip() for final in runners_webelem.text.encode('utf-8').split(',')]
 
 def get_tags(description, title):
@@ -157,7 +195,10 @@ def get_tags(description, title):
 
 	return tag_list
 
-get_all_events()
+# get_all_events()
+# get_runs_by_event()
+# get_all_users()
+get_all_prizes()
 browser.close()
 
 # all donors
