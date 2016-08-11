@@ -162,6 +162,13 @@ def get_all_prizes():
 		
 		print ""
 
+def get_bids_by_event():
+	events = [5,3,2,1,7,8,9,10,12,16,17,18]
+	event_name = [ 	'agdq2011', 'sgdq2011', 'agdq2012', \
+					'sgdq2012', 'agdq2013', 'sgdq2013', \
+					'agdq2014', 'sgdq2014', 'agdq2015', \
+					'sgdq2015', 'agdq2016', 'sgdq2016']
+
 
 def get_runners(runners_webelem):
 	# "None" still considered a runner. " and " still gives runner
@@ -202,6 +209,9 @@ def get_tags(description, title):
 	if ('blindfold' in text):
 		tag_list.append('Blindfolded')
 
+	if ('tasbot' in text) or (' tas ' in text):
+		tag_list.append('TAS')
+
 	if 'good end' in text:
 		tag_list.append('Good Ending')
 
@@ -222,10 +232,11 @@ def get_tags(description, title):
 
 	return tag_list
 
-# get_all_events()
-# get_runs_by_event()
-# get_all_users()
-get_all_prizes()
+# get_all_events
+# get_runs_by_event
+# get_all_users
+#get_all_prizes
+get_bids_by_event
 browser.close()
 
 # all donors
