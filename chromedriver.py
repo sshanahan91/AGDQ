@@ -232,6 +232,32 @@ def get_bids_by_event():
 			last_id = bid_ids[len(bid_ids)-1]
 			print ""
 
+def get_all_donations():
+	browser.get('https://gamesdonequick.com/tracker/donations/')
+	all_events = browser.find_elements_by_xpath('/html/body/div[1]/p[1]/a[contains(@class, \'last\')]')
+	rubbish, final = all_events[0].get_attribute("href").strip().split("=")
+	for i in range(0, int(final)):
+		get_donation_by_page(i+1)
+
+def get_donation_by_page(page):
+	browser.get('https://gamesdonequick.com/tracker/donations/?page=' + str(page))
+
+	all_donations = browser.find_elements_by_tag_name('tr')
+	for i in range(1, len(all_donations)):
+		donation = browser.find_elements_by_xpath('//table/tbody/tr[%d]/td' % i)
+		donation_user_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
+		user_link = donation_user_link.get_attribute("href").split("/")
+		donation_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[3]/a' % i)
+		link = donation_link.get_attribute("href").split("/")
+		print "user_id:       " + user_link[len(user_link)-2]
+		print "event_id:      " + user_link[len(user_link)-1]
+		print "time_recieved: " + donation[1].text.encode('utf-8').strip()
+		print "amount:        %.2f" % float((donation[2].text.encode('utf-8').strip()).translate(None, '$,'))
+		print "donation_id:   " + link[len(link)-1]
+		print "has_comment:   " + str(True if (donation[3].text.encode('utf-8').strip() == 'Yes') else False)
+		print ""
+
+
 def get_runners(runners_webelem):
 	# "None" still considered a runner. " and " still gives runner
 	#  information concatenated.
@@ -298,7 +324,8 @@ def get_tags(description, title):
 # get_runs_by_event()
 # get_all_users()
 #get_all_prizes()
-get_bids_by_event()
+#get_bids_by_event()
+get_all_donations()
 browser.close()
 
 # all donors
