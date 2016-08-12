@@ -155,12 +155,11 @@ def get_all_prizes():
 		print ""
 
 def get_bids_by_event():
-	### adgq2014 kill the animals sub-choice bug
 	# events = [5,3,2,1,7,8,9,10,12,16,17,18]
 	event_name = [ 	'agdq2011', 'sgdq2011', 'agdq2012', \
 					'sgdq2012', 'agdq2013', 'sgdq2013', \
 					'agdq2014', 'sgdq2014', 'agdq2015', \
-					'sgdq2015', 'agdq2016', 'sgdq2016']
+					'sgdq2015', 'agdq2016', 'sgdq2016' ]
 	
 	for event_id in event_name:
 		browser.get('https://gamesdonequick.com/tracker/bids/' + event_id)
@@ -173,6 +172,30 @@ def get_bids_by_event():
 				bid = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td' % i)
 			except:
 				if (last_id != 0):
+					if (event_id == 'agdq2014' and last_id == '1077'): # save or kill the animals...
+
+						browser.find_element_by_xpath('//*[@id="bidOptionToggle1077"]/td/button').click()
+						browser.find_element_by_xpath('//*[@id="bidOptionToggle1078"]/td/button').click()
+						for k in range(1, 3):
+							kill_save_choice = browser.find_elements_by_xpath('//*[@id="bidOptionData1078"]/td/table/tbody/tr[%d]/td' % k)
+							kill_save_choice_link = browser.find_element_by_xpath('//*[@id="bidOptionData1078"]/td/table/tbody/tr[%d]/td[1]/a' % k)
+							choice_ids = kill_save_choice_link.get_attribute("href").split("/")
+							print "----choice_id:    %s" % choice_ids[len(choice_ids)-1]
+							print "----bid_id:       %s" % last_id
+							print "----choice_name:  %s" % kill_save_choice[0].text.encode('utf-8').strip()
+							print "----description:  %s" % kill_save_choice[1].text.encode('utf-8').strip()
+							print "----"
+						#"second" choice
+						kill_save_choice = browser.find_elements_by_xpath('//*[@id="bidOptionData1077"]/td/table/tbody/tr[4]/td')
+						kill_save_choice_link = browser.find_element_by_xpath('//*[@id="bidOptionData1077"]/td/table/tbody/tr[4]/td[1]/a')
+						choice_ids = kill_save_choice_link.get_attribute("href").split("/")
+						print "----choice_id:    %s" % choice_ids[len(choice_ids)-1]
+						print "----bid_id:       %s" % last_id
+						print "----choice_name:  %s" % kill_save_choice[0].text.encode('utf-8').strip()
+						print "----description:  %s" % kill_save_choice[1].text.encode('utf-8').strip()
+						print "----"
+						last_id = 0
+						continue
 					browser.find_element_by_xpath('//*[@id="bidOptionToggle'+last_id+'"]/td/button').click()
 
 					all_bid_choices = browser.find_elements_by_xpath('//*[@id="bidOptionData%s"]/td/table/tbody/tr' % last_id)
