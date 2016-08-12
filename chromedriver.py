@@ -169,13 +169,19 @@ def get_bids_by_event():
 				bid_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
 				bid_ids = bid_link.get_attribute("href").split("/")
 				bid = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td' % i)
-				print "bid_id:      %s" % bid_ids[len(bid_ids)-1]
+				print "bid_id:       %s" % bid_ids[len(bid_ids)-1]
 				#need to search database for event and run name.
-				print "run_id:      %s" % bid[1].text.encode('utf-8').strip()
-				print "bid_name:    %s" % bid[0].text.encode('utf-8').strip()
-				print "description: %s" % bid[2].text.encode('utf-8').strip()
-				print "goal:        %s" % bid[3].text.encode('utf-8').strip()
-				print "goal_met:    %s" % bid[4].text.encode('utf-8').strip()
+				print "run_id:       %s" % bid[1].text.encode('utf-8').strip()
+				print "bid_name:     %s" % bid[0].text.encode('utf-8').strip()
+				print "description:  %s" % bid[2].text.encode('utf-8').strip()
+				raised = float((bid[3].text.encode('utf-8').strip()).translate(None, '$'))
+				print "tot_donatns?: %.2f" % raised
+				if (bid[4].text.encode('utf-8').strip() != "(None)"):
+					goal = float((bid[4].text.encode('utf-8').strip()).translate(None, '$'))
+				else:
+					goal = 0
+				print "goal:         %.2f" % goal
+				print "goal_met:     %s" % (True if (raised >= goal) else False)
 				last_id = bid_ids[len(bid_ids)-1]
 			except:
 				try:
