@@ -1,4 +1,5 @@
 import os
+import sys
 from selenium import webdriver
 
 global browser 
@@ -184,22 +185,25 @@ def get_bids_by_event():
 				print "goal_met:     %s" % (True if (raised >= goal) else False)
 				last_id = bid_ids[len(bid_ids)-1]
 			except:
-				try:
+############################################
+############################################
+############################################
+				if (last_id != 0):
+					browser.find_element_by_xpath('//*[@id="bidOptionToggle'+last_id+'"]/td/button').click()
+
 					all_bid_choices = browser.find_elements_by_xpath('//*[@id="bidOptionData%s"]/td/table/tbody/tr' % last_id)
-					bid_choices = browser.find_element_by_xpath('//*[@id="bidOptionData%s"]/td/table/tbody/tr[1]/td[1]/a' % last_id)
+
+					for j in range(1, len(all_bid_choices)+1):
+						bid_choices = browser.find_elements_by_xpath('//*[@id="bidOptionData%s"]/td/table/tbody/tr[%d]/td' % (last_id, j))
+						bid_choices_link = browser.find_element_by_xpath('//*[@id="bidOptionData%s"]/td/table/tbody/tr[%d]/td[1]/a' % (last_id, j))
+						choice_ids = bid_choices_link.get_attribute("href").split("/")
+						print "----choice_id:    %s" % choice_ids[len(choice_ids)-1]
+						print "----bid_id:       %s" % last_id
+						print "----choice_name:  %s" % bid_choices[0].text.encode('utf-8').strip()
+						print "----description:  %s" % bid_choices[1].text.encode('utf-8').strip()
+						print "----"
 					last_id = 0
-					print "----%s:%s: %s choices" % (event_id, str(i), len(all_bid_choices))
-				except:
-					#skipping choices after 2nd round
-					continue
 			print ""
-
-
-			
-
-
-		
-
 
 def get_runners(runners_webelem):
 	# "None" still considered a runner. " and " still gives runner
