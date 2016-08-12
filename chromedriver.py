@@ -150,24 +150,49 @@ def get_all_prizes():
 			browser.get('https://gamesdonequick.com/tracker/prizes')
 		else:
 			game_id_link = games_link[0].get_attribute("href").split("/")
-			print "run_id/" + game_id_link[len(game_id_link)-1]
-
-		# if (len(games_link) > 1):
-		# 	print "multiple games"
-		# elif (len(games_link) == 0):
-		# 	print "grand prize"
-		# else:
-		# 	game = games_link[0].get_attribute("href").split("/")
-		# 	print "run_id/" + game[len(link)-1] + "\tprize_id/" + link[len(link)-1]
-		
+			print "run_id/" + game_id_link[len(game_id_link)-1]		
 		print ""
 
 def get_bids_by_event():
-	events = [5,3,2,1,7,8,9,10,12,16,17,18]
+	# events = [5,3,2,1,7,8,9,10,12,16,17,18]
 	event_name = [ 	'agdq2011', 'sgdq2011', 'agdq2012', \
 					'sgdq2012', 'agdq2013', 'sgdq2013', \
 					'agdq2014', 'sgdq2014', 'agdq2015', \
 					'sgdq2015', 'agdq2016', 'sgdq2016']
+	
+	for event_id in event_name:
+		browser.get('https://gamesdonequick.com/tracker/bids/' + event_id)
+		all_bids = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr')
+
+		for i in range(1, len(all_bids)+1):
+			try:
+				bid_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
+				bid_ids = bid_link.get_attribute("href").split("/")
+				bid = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td' % i)
+				print "bid_id:      %s" % bid_ids[len(bid_ids)-1]
+				#need to search database for event and run name.
+				print "run_id:      %s" % bid[1].text.encode('utf-8').strip()
+				print "bid_name:    %s" % bid[0].text.encode('utf-8').strip()
+				print "description: %s" % bid[2].text.encode('utf-8').strip()
+				print "goal:        %s" % bid[3].text.encode('utf-8').strip()
+				print "goal_met:    %s" % bid[4].text.encode('utf-8').strip()
+				last_id = bid_ids[len(bid_ids)-1]
+			except:
+				try:
+					all_bid_choices = browser.find_elements_by_xpath('//*[@id="bidOptionData%s"]/td/table/tbody/tr' % last_id)
+					bid_choices = browser.find_element_by_xpath('//*[@id="bidOptionData%s"]/td/table/tbody/tr[1]/td[1]/a' % last_id)
+					last_id = 0
+					print "----%s:%s: %s choices" % (event_id, str(i), len(all_bid_choices))
+				except:
+					#skipping choices after 2nd round
+					continue
+			print ""
+
+
+			
+
+
+		
 
 
 def get_runners(runners_webelem):
@@ -232,14 +257,15 @@ def get_tags(description, title):
 
 	return tag_list
 
-# get_all_events
-# get_runs_by_event
-# get_all_users
-#get_all_prizes
-get_bids_by_event
+# get_all_events()
+# get_runs_by_event()
+# get_all_users()
+#get_all_prizes()
+get_bids_by_event()
 browser.close()
 
 # all donors
+#  --donations?
 # all events
 # 
 # all runs
@@ -253,6 +279,7 @@ browser.close()
 #   --when winners, connect prize_to_winner
 #   --when runs, connect prize_to_runs
 # 
-# 
-# 
-# 
+# all bids
+#  --when choices add choice
+#    --when bid choices, connect bid_to_choice
+#      --connect to donation_id
