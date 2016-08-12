@@ -252,7 +252,7 @@ def get_donation_by_page(page):
 	browser.get('https://gamesdonequick.com/tracker/donations/?page=' + str(page))
 
 	all_donations = browser.find_elements_by_tag_name('tr')
-	for i in range(1, len(all_donations)):
+	for i in range(1, len(all_donations)+1):
 		donation = browser.find_elements_by_xpath('//table/tbody/tr[%d]/td' % i)
 		donation_user_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
 		user_link = donation_user_link.get_attribute("href").split("/")
@@ -266,9 +266,24 @@ def get_donation_by_page(page):
 		print "has_comment:   " + str(True if (donation[3].text.encode('utf-8').strip() == 'Yes') else False)
 		print ""
 
-def get_donation_bids_by_choice(array = []):
-	print 'in progress'
+def get_donation_bids_by_choice(choice_ids = []):
 	#requires each individual choice id on the /bid/{num} page.
+	for choice_id in choice_ids:
+		browser.get('https://gamesdonequick.com/tracker/bid/' + str(choice_id))
+
+		all_choices = browser.find_elements_by_tag_name('tr')
+		for i in range(1, len(all_choices)):
+			choice = browser.find_elements_by_xpath('//table/tbody/tr[%d]/td' % i)
+			choice_user_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
+			user_link = choice_user_link.get_attribute("href").split("/")
+			choice_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[3]/a' % i)
+			link = choice_link.get_attribute("href").split("/")
+			print "choice_id:     " + str(choice_id)
+			print "user_id:       " + user_link[len(user_link)-2]
+			print "time_recieved: " + choice[1].text.encode('utf-8').strip()
+			print "amount:        %.2f" % float((choice[2].text.encode('utf-8').strip()).translate(None, '$,'))
+			print "donation_id:   " + link[len(link)-1]
+			print ""
 
 
 def get_runners(runners_webelem):
@@ -333,12 +348,18 @@ def get_tags(description, title):
 
 	return tag_list
 
-# get_all_events()
-# get_runs_by_event()
-# get_all_users()
-#get_all_prizes()
+get_all_events()
+get_runs_by_event()
+get_all_users()
+get_all_prizes()
+
 get_bids_by_event()
-#get_all_donations()
+
+## must come after users
+get_all_donations()
+
+## need each bid_choice
+#get_donation_bids_by_choice()
 browser.close()
 
 # all donors
