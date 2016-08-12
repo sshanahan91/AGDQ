@@ -155,6 +155,7 @@ def get_all_prizes():
 		print ""
 
 def get_bids_by_event():
+	### adgq2014 kill the animals sub-choice bug
 	# events = [5,3,2,1,7,8,9,10,12,16,17,18]
 	event_name = [ 	'agdq2011', 'sgdq2011', 'agdq2012', \
 					'sgdq2012', 'agdq2013', 'sgdq2013', \
@@ -170,24 +171,7 @@ def get_bids_by_event():
 				bid_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
 				bid_ids = bid_link.get_attribute("href").split("/")
 				bid = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td' % i)
-				print "bid_id:       %s" % bid_ids[len(bid_ids)-1]
-				#need to search database for event and run name.
-				print "run_id:       %s" % bid[1].text.encode('utf-8').strip()
-				print "bid_name:     %s" % bid[0].text.encode('utf-8').strip()
-				print "description:  %s" % bid[2].text.encode('utf-8').strip()
-				raised = float((bid[3].text.encode('utf-8').strip()).translate(None, '$'))
-				print "tot_donatns?: %.2f" % raised
-				if (bid[4].text.encode('utf-8').strip() != "(None)"):
-					goal = float((bid[4].text.encode('utf-8').strip()).translate(None, '$'))
-				else:
-					goal = 0
-				print "goal:         %.2f" % goal
-				print "goal_met:     %s" % (True if (raised >= goal) else False)
-				last_id = bid_ids[len(bid_ids)-1]
 			except:
-############################################
-############################################
-############################################
 				if (last_id != 0):
 					browser.find_element_by_xpath('//*[@id="bidOptionToggle'+last_id+'"]/td/button').click()
 
@@ -203,6 +187,26 @@ def get_bids_by_event():
 						print "----description:  %s" % bid_choices[1].text.encode('utf-8').strip()
 						print "----"
 					last_id = 0
+				continue
+			print "bid_id:       %s" % bid_ids[len(bid_ids)-1]
+			#need to search database for event and run name.
+			print "bid_name:     %s" % bid[0].text.encode('utf-8').strip()
+			if (len(bid) == 4): # if there is no run name, the columns are offset by 1
+				no_run_offset = -1
+			else:
+				no_run_offset = 0
+				print "run_id:       %s" % bid[1].text.encode('utf-8').strip()
+
+			print "description:  %s" % bid[2 + no_run_offset].text.encode('utf-8').strip()
+			raised = float((bid[3 + no_run_offset].text.encode('utf-8').strip()).translate(None, '$,'))
+			print "tot_donatns?: %.2f" % raised
+			if (bid[4 + no_run_offset].text.encode('utf-8').strip() != "(None)"):
+				goal = float((bid[4 + no_run_offset].text.encode('utf-8').strip()).translate(None, '$,'))
+			else:
+				goal = 0
+			print "goal:         %.2f" % goal
+			print "goal_met:     %s" % (True if (raised >= goal) else False)
+			last_id = bid_ids[len(bid_ids)-1]
 			print ""
 
 def get_runners(runners_webelem):
