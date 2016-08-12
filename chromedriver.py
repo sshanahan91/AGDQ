@@ -163,6 +163,7 @@ def get_bids_by_event():
 	
 	for event_id in event_name:
 		browser.get('https://gamesdonequick.com/tracker/bids/' + event_id)
+		last_id = 0
 		all_bids = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr')
 
 		for i in range(1, len(all_bids)+1):
@@ -231,6 +232,14 @@ def get_bids_by_event():
 			print "goal_met:     %s" % (True if (raised >= goal) else False)
 			last_id = bid_ids[len(bid_ids)-1]
 			print ""
+			try:
+				browser.find_element_by_xpath('//*[@id="bidOptionToggle'+last_id+'"]/td/button')
+			except:
+				print "----choice_id:    %s" % bid_ids[len(bid_ids)-1]
+				print "----bid_id:       %s" % bid_ids[len(bid_ids)-1]
+				print "----choice_name:  %s" % bid[0].text.encode('utf-8').strip()
+				print "----description:  %s" % bid[2 + no_run_offset].text.encode('utf-8').strip()
+				print "----"
 
 def get_all_donations():
 	browser.get('https://gamesdonequick.com/tracker/donations/')
@@ -256,6 +265,10 @@ def get_donation_by_page(page):
 		print "donation_id:   " + link[len(link)-1]
 		print "has_comment:   " + str(True if (donation[3].text.encode('utf-8').strip() == 'Yes') else False)
 		print ""
+
+def get_donation_bids_by_choice(array = []):
+	print 'in progress'
+	#requires each individual choice id on the /bid/{num} page.
 
 
 def get_runners(runners_webelem):
@@ -324,8 +337,8 @@ def get_tags(description, title):
 # get_runs_by_event()
 # get_all_users()
 #get_all_prizes()
-#get_bids_by_event()
-get_all_donations()
+get_bids_by_event()
+#get_all_donations()
 browser.close()
 
 # all donors
