@@ -149,9 +149,11 @@ def get_all_prizes():
 				prize_id_link = prize_link.get_attribute("href").split("/")
 				print "run_id/" + prize_id_link[len(prize_id_link)-1]
 			browser.get('https://gamesdonequick.com/tracker/prizes')
-		else:
+		elif (len(games_link) == 1):
 			game_id_link = games_link[0].get_attribute("href").split("/")
 			print "run_id/" + game_id_link[len(game_id_link)-1]		
+		else:
+			continue
 		print ""
 
 def get_bids_by_event():
@@ -340,17 +342,28 @@ def get_tags(description, title):
 	if ('coop' in text) or ('co-op' in text):
 		tag_list.append('4p')
 
+	if ('1p2c' in text) or ('1 player, 2 controllers' in text):
+		tag_list.append('4p')
+
 	if 'hard mode' in text:
 		tag_list.append('Hard Mode')
 
-	if 'best end' in text:
+	if ('best end' in text) or ('true end' in text):
 		tag_list.append('Best Ending')
+
+	if ('no warp' in text) or ('warpless' in text):
+		tag_list.append('Warpless')
 
 	return tag_list
 
 get_all_events()
-get_runs_by_event()
 get_all_users()
+
+# without event_ids as an array, event_id not saved with data
+# without users first, cant search for players based on name
+get_runs_by_event()
+
+#
 get_all_prizes()
 
 get_bids_by_event()
