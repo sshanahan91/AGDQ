@@ -103,7 +103,7 @@ def get_all_prizes():
 	browser.get('https://gamesdonequick.com/tracker/prizes')
 	all_prizes = browser.find_elements_by_tag_name('tr')
 
-	for i in range(1, len(all_prizes)-1): #/html/body/div[1]/table/tbody/tr[129]/td[1]/a
+	for i in range(1, len(all_prizes)):
 		prize_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
 		games_link = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[4]/a' % i)		
 		prize = browser.find_elements_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td' % i)
