@@ -254,7 +254,7 @@ def get_donation_by_page(page):
 	browser.get('https://gamesdonequick.com/tracker/donations/?page=' + str(page))
 
 	all_donations = browser.find_elements_by_tag_name('tr')
-	for i in range(1, len(all_donations)+1):
+	for i in range(1, len(all_donations)):
 		donation = browser.find_elements_by_xpath('//table/tbody/tr[%d]/td' % i)
 		donation_user_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
 		user_link = donation_user_link.get_attribute("href").split("/")
