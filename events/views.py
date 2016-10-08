@@ -10,4 +10,14 @@ def index(request):
 	return render(request, 'events/index.html', context)
 
 def detail(request, event_id):
-	return HttpResponse(event_id)
+	context = {
+		'event_id': event_id
+	}
+	return render(request, 'events/details.html', context)
+
+
+def detail_id(request, event_id):
+	context = {
+		'event_id': event_id
+	}
+	return render(request, 'events/details.html', context)

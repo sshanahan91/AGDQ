@@ -5,7 +5,8 @@
 <html xmlns="//www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>
-All Events -- Index
+{% block title %}
+{% endblock %}
 </title>
 <link rel="stylesheet" type="text/css" href="/static/tracker/jquery.datetimepicker.css"/>
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css"/>
@@ -50,22 +51,22 @@ All Events -- Index
 <li class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
 <ul class="dropdown-menu small">
-<li><a href="/tracker/index/cgdq">Classic Games Done Quick</a></li>
-<li><a href="/tracker/index/agdq2011">Awesome Games Done Quick 2011</a></li>
-<li><a href="/tracker/index/jrdq">Japan Relief Done Quick</a></li>
-<li><a href="/tracker/index/sgdq2011">Summer Games Done Quick 2011</a></li>
-<li><a href="/tracker/index/agdq2012">Awesome Games Done Quick 2012</a></li>
-<li><a href="/tracker/index/sgdq2012">Summer Games Done Quick 2012</a></li>
-<li><a href="/tracker/index/spook">Speedrun Spooktacular</a></li>
-<li><a href="/tracker/index/agdq2013">Awesome Games Done Quick 2013</a></li>
-<li><a href="/tracker/index/sgdq2013">Summer Games Done Quick 2013</a></li>
-<li><a href="/tracker/index/agdq2014">Awesome Games Done Quick 2014</a></li>
-<li><a href="/tracker/index/sgdq2014">Summer Games Done Quick 2014</a></li>
-<li><a href="/tracker/index/agdq2015">Awesome Games Done Quick 2015</a></li>
-<li><a href="/tracker/index/sgdq2015">Summer Games Done Quick 2015</a></li>
-<li><a href="/tracker/index/agdq2016">Awesome Games Done Quick 2016</a></li>
-<li><a href="/tracker/index/sgdq2016">Summer Games Done Quick 2016</a></li>
-<li><a href="/tracker/index/agdq2017">Awesome Games Done Quick 2017</a></li>
+<li><a href="/tracker/event/cgdq">Classic Games Done Quick</a></li>
+<li><a href="/tracker/event/agdq2011">Awesome Games Done Quick 2011</a></li>
+<li><a href="/tracker/event/jrdq">Japan Relief Done Quick</a></li>
+<li><a href="/tracker/event/sgdq2011">Summer Games Done Quick 2011</a></li>
+<li><a href="/tracker/event/agdq2012">Awesome Games Done Quick 2012</a></li>
+<li><a href="/tracker/event/sgdq2012">Summer Games Done Quick 2012</a></li>
+<li><a href="/tracker/event/spook">Speedrun Spooktacular</a></li>
+<li><a href="/tracker/event/agdq2013">Awesome Games Done Quick 2013</a></li>
+<li><a href="/tracker/event/sgdq2013">Summer Games Done Quick 2013</a></li>
+<li><a href="/tracker/event/agdq2014">Awesome Games Done Quick 2014</a></li>
+<li><a href="/tracker/event/sgdq2014">Summer Games Done Quick 2014</a></li>
+<li><a href="/tracker/event/agdq2015">Awesome Games Done Quick 2015</a></li>
+<li><a href="/tracker/event/sgdq2015">Summer Games Done Quick 2015</a></li>
+<li><a href="/tracker/event/agdq2016">Awesome Games Done Quick 2016</a></li>
+<li><a href="/tracker/event/sgdq2016">Summer Games Done Quick 2016</a></li>
+<li><a href="/tracker/event/agdq2017">Awesome Games Done Quick 2017</a></li>
 <li role="separator" class="divider"></li>
 <li><a href="/tracker/">All Events</a></li>
 </ul>
@@ -74,7 +75,7 @@ All Events -- Index
 </div>
 </div>
 </nav>
-
+<br/><br/>
 {% block body %}
 {% endblock %}
 

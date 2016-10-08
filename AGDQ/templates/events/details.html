@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{event_id}} -- AGDQ
+{% endblock %}
+
+{% block body %}
+
+
+<div class="container-fluid">
+<h2 class="text-center">
+{{ event_id }}
+<br/>
+<small>
+Donation Total:
+$257,181.07 (10781) &mdash;
+Max/Avg Donation:
+$6,000.00/$23.86
+</small>
+</h2>
+<div class="col-xs-4 col-xs-offset-4">
+<p class="center-block"><br/></p>
+<p class="center-block"><a class="btn btn-default btn-block" href="/tracker/runs/sgdq2013">View Runs (89)</a></p>
+<p class="center-block"><a class="btn btn-default btn-block" href="/tracker/prizes/sgdq2013">View Prizes (65)</a></p>
+<p class="center-block"><a class="btn btn-default btn-block" href="/tracker/bids/sgdq2013">View Bids (107)</a></p>
+<p class="center-block"><a class="btn btn-default btn-block" href="/tracker/donors/sgdq2013">View Donors (6878)</a></p>
+<p class="center-block"><a class="btn btn-default btn-block" href="/tracker/donations/sgdq2013">View Donations (10781)</a></p>
+<p class="center-block"><a class="btn btn-info btn-block" href="/tracker/events/">Select another Event</a></p>
+<br/>
+</div>
+</div>
+<p align="center">
+</p>
+
+{% endblock %}
