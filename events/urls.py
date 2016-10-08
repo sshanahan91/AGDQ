@@ -10,6 +10,6 @@ urlpatterns = [
     url(r'event/(?P<event_id>[0-9]+)$', views.detail, name='event_detail'),
 
 	#/tracker (index)
-    url(r'/*', views.index, name='index'),
+    url(r'', views.index, name='index'),
 
 ]
