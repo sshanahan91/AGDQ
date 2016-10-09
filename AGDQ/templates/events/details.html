@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{{event_id}} -- AGDQ
+{{ event.name }} -- AGDQ
 {% endblock %}
 
 {% block body %}
@@ -9,7 +9,7 @@
 
 <div class="container-fluid">
 	<h2 class="text-center">
-		{{ event_id }}
+		{{ event.name }}
 		<br/>
 		<small>
 			Donation Total:
