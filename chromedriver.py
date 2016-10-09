@@ -2,8 +2,18 @@ import os
 import sys
 from selenium import webdriver
 
-global browser 
+import django
+os.environ['DJANGO_SETTINGS_MODULE'] = 'AGDQ.settings'
+django.setup()
 
+from datetime import datetime
+import re
+from events.models import Event
+
+
+
+
+global browser 
 path_to_chromedriver = os.path.dirname(os.path.abspath(__file__)) + '/chromedriver'
 browser = webdriver.Chrome(executable_path = path_to_chromedriver)
 
@@ -56,29 +66,39 @@ def get_all_events():
 	browser.get('https://gamesdonequick.com/tracker/')
 	all_events = browser.find_elements_by_xpath('//*[@id="bs-example-navbar-collapse-1"]/ul/li[7]/ul/li')
 
-	for i in range(1, len(all_events)-1):
+	for i in range(1, len(all_events)-2):
+		event = Event()
 		run_link = browser.find_element_by_xpath('//*[@id="bs-example-navbar-collapse-1"]/ul/li[7]/ul/li[%d]/a' % i)
 		run = browser.find_element_by_xpath('//*[@id="bs-example-navbar-collapse-1"]/ul/li[7]/ul/li[%d]/a' % i)
 		link = run_link.get_attribute("href").split("/")
 		
-		print "event_id:   " + link[len(link)-1]
-		print "event_name: " + run.get_attribute("innerHTML").strip()
-		get_event_range(link[len(link)-1])
-		print ""
+		event.event_id = link[len(link)-1]
+		event.name = run.get_attribute("innerHTML").strip()
+		
+		browser.get('https://gamesdonequick.com/tracker/donations/%s' % event.event_id)
 
-def get_event_range(event_id):
-	browser.get('https://gamesdonequick.com/tracker/donations/' + event_id)
+		event_range = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[1]/td[2]')
+		ended_at = event_range.text.encode('utf-8').strip()
+		event.ended_at = get_datetime(ended_at)
+		
+		all_events = browser.find_elements_by_xpath('/html/body/div[1]/p[1]/a[contains(@class, \'last\')]')
+		rubbish, final = all_events[0].get_attribute("href").strip().split("=")
 
-	event_range = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[1]/td[2]')
-	print "ended_at:   " + event_range.text.encode('utf-8').strip()
-	all_events = browser.find_elements_by_xpath('/html/body/div[1]/p[1]/a[contains(@class, \'last\')]')
-	rubbish, final = all_events[0].get_attribute("href").strip().split("=")
+		browser.get('https://gamesdonequick.com/tracker/donations/%s?page=%s' % (event.event_id, final))
+		all_runs = browser.find_elements_by_tag_name('tr')
+		last = len(all_runs)-1
+		event_range = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[2]' % last)
+		started_at = event_range.text.encode('utf-8').strip()
+		event.started_at = get_datetime(started_at)
+		event.save()
 
-	browser.get('https://gamesdonequick.com/tracker/donations/%s?page=%s' % (event_id, final))
-	all_runs = browser.find_elements_by_tag_name('tr')
-	last = len(all_runs)-1
-	event_range = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[2]' % last)
-	print "started_at: " + event_range.text.encode('utf-8').strip()
+def get_datetime(string):
+	try:
+		date_in = re.sub(r"(st|nd|rd|th),", ",", string)
+		print date_in
+		return datetime.strptime(date_in, '%B %d, %Y, %I:%M:%S %p')
+	except:
+		print "not abbreviated"
 
 def get_all_users():
 	browser.get('https://gamesdonequick.com/tracker/donors/')
@@ -357,19 +377,19 @@ def get_tags(description, title):
 	return tag_list
 
 get_all_events()
-get_all_users()
+#get_all_users()
 
 # without event_ids as an array, event_id not saved with data
 # without users first, cant search for players based on name
-get_runs_by_event()
+#get_runs_by_event()
 
 #
-get_all_prizes()
+#get_all_prizes()
 
-get_bids_by_event()
+#get_bids_by_event()
 
 ## must come after users
-get_all_donations()
+#get_all_donations()
 
 ## need each bid_choice
 #get_donation_bids_by_choice()
