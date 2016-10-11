@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ event.name }} -- AGDQ
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+	<div class="fa-stack center-block medium-icon-blue fa-5x">
+		<i class="fa fa-circle fa-stack-2x"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+	</div>
+	<h2 class="text-center">
+		Donor Index
+		&mdash;
+		All Events
+	</h2>
+	<table class="table table-condensed table-striped small">
+		<thead>
+			<tr>
+				<th>
+					Name<a href="?sort=name&amp;order=1&amp;page=1" class="asc"><span style="display:none;">Asc</span></a><a href="?sort=name&amp;order=-1&amp;page=1" class="dsc"><span style="display:none;">Dsc</span></a>
+				</th>
+				<th>
+					Alias
+				</th>
+				<th>
+					Total<a href="?sort=total&amp;order=1&amp;page=1" class="asc"><span style="display:none;">Asc</span></a><a href="?sort=total&amp;order=-1&amp;page=1" class="dsc"><span style="display:none;">Dsc</span></a>
+				</th>
+				<th>
+					Max<a href="?sort=max&amp;order=1&amp;page=1" class="asc"><span style="display:none;">Asc</span></a><a href="?sort=max&amp;order=-1&amp;page=1" class="dsc"><span style="display:none;">Dsc</span></a>/Avg<a href="?sort=avg&amp;order=1&amp;page=1" class="asc"><span style="display:none;">Asc</span></a><a href="?sort=avg&amp;order=-1&amp;page=1" class="dsc"><span style="display:none;">Dsc</span></a> Donation
+				</th>
+			</tr>
+		</thead>
+		<tr>
+			<td>
+				<a href="/tracker/donor/42231/">mapler90210_l</a>
+			</td>
+			<td>
+				mapler90210_l
+			</td>
+			<td>
+				$110.00 (5)
+			</td>
+			<td>
+				$40.00/$22.00
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<a href="/tracker/donor/41657/">mundungu</a>
+			</td>
+			<td>
+				mundungu
+			</td>
+			<td>
+				$20.00 (1)
+			</td>
+			<td>
+				$20.00/$20.00
+			</td>
+		</tr>
+
+	</tr>
+</table>
+<p class="text-center larger">
+	<a href="?page=1" class="first"><span style="display:none;">|&lt; </span></a>
+	1
+	<a href="?page=2">2</a>
+	<a href="?page=3">3</a>
+	<a href="?page=4">4</a>
+	<a href="?page=5">5</a>
+	<a href="?page=6">6</a>
+	<a href="?page=10">10</a>
+	<a href="?page=20">20</a>
+	<a href="?page=30">30</a>
+	<a href="?page=40">40</a>
+	<a href="?page=50">50</a>
+	<a href="?page=60">60</a>
+
+	<a href="?page=2" class="next"><span style="display:none;">> </span></a>
+	<a href="?page=2067" class="last"><span style="display:none;">&gt;| </span></a>
+</p>
+<div class="text-center">
+	<form action="" method="get">
+		<label for="page">
+			Page
+		</label>
+		<select name="page">
+			<option selected="selected">1</option>
+			<option>2</option>
+			<option>2</option>
+			<option>2</option>
+			<option>2</option>
+			<option>2</option>
+			<option>2</option>
+			<option>2</option>
+
+		</select>
+		<label for="sort">of 2067</label>
+		<input class="btn btn-primary btn-sm" type="submit" value="Go"/>
+	</form>
+</div>
+<p class="text-center extra-spacing"><a href="/tracker/" class="btn btn-default">
+	Back to Main Index</a></p>
+</div>
+<p align="center">
+</p>
+
+{% endblock %}

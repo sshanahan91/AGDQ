@@ -376,8 +376,8 @@ def get_tags(description, title):
 
 	return tag_list
 
-get_all_events()
-#get_all_users()
+#get_all_events()
+get_all_users()
 
 # without event_ids as an array, event_id not saved with data
 # without users first, cant search for players based on name

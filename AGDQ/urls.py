@@ -18,6 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^tracker/index/', include('events.urls')),
-    url(r'^tracker/', include('events.urls')),
+    url(r'^tracker/event', include('events.urls')),
+    url(r'^tracker/donor', include('profiles.urls')),
 ]

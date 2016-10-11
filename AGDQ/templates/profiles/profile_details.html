@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ event.name }} -- AGDQ
+{% endblock %}
+
+{% block body %}
+
+
+<div class="container-fluid">
+	<h2 class="text-center">
+		mundungu
+		<br/>
+		<small>
+			Total Donations:
+			$20.00 (1)
+			&mdash;
+			Max/Avg Donation:
+			$20.00/$20.00
+		</small>
+	</h2>
+	<table class="table table-condensed table-striped small">
+		<thead>
+			<tr>
+				<th>
+					Time Received
+				</th>
+				<th>
+					Amount
+				</th>
+				<th>
+					Comment
+				</th>
+			</tr>
+		</thead>
+		<tr class="small">
+			<td>
+				<span class="datetime">01/08/2012 23:18:20 +0000</span>
+			</td>
+			<td>
+				<a href="/tracker/donation/115837">$20.00</a>
+			</td>
+			<td>
+				No
+			</td>
+		</tr>
+	</table>
+	<p align="center"><a href="/tracker/donor/41657/?comments">
+		Show Comments
+	</a></p>
+	<p align="center"><a href="/tracker/donors/">Back to Donor Index</a></p>
+	<p class="text-center extra-spacing"><a href="/tracker/" class="btn btn-default">
+		Back to Main Index</a></p>
+	</div>
+	<p align="center">
+	</p>
+
+{% endblock %}
