@@ -9,6 +9,7 @@ django.setup()
 from datetime import datetime
 import re
 from events.models import Event
+from profiles.models import Profile
 
 
 
@@ -100,24 +101,30 @@ def get_datetime(string):
 	except:
 		print "not abbreviated"
 
+# maybe retry 1-372, just incase there was some unknown loss.
 def get_all_users():
 	browser.get('https://gamesdonequick.com/tracker/donors/')
 	all_events = browser.find_elements_by_xpath('/html/body/div[1]/p[1]/a[contains(@class, \'last\')]')
 	rubbish, final = all_events[0].get_attribute("href").strip().split("=")
-	for i in range(0, int(final)):
+	for i in range(1, int(final)):
 		get_user_by_page(i+1)
 
 def get_user_by_page(page):
 	browser.get('https://gamesdonequick.com/tracker/donors/?page=' + str(page))
 
-	all_runs = browser.find_elements_by_tag_name('tr')
-	for i in range(1, len(all_runs)):
-		run = browser.find_elements_by_xpath('//table/tbody/tr[%d]/td' % i)
-		run_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
-		link = run_link.get_attribute("href").split("/")
-		print "user_id: " + link[len(link)-2]
-		print "name:    " + run[0].text.encode('utf-8').strip()
-		print "alias:   " + run[1].text.encode('utf-8').strip()
+	try:
+		all_runs = browser.find_elements_by_tag_name('tr')
+		for i in range(0, len(all_runs)):
+			run = browser.find_elements_by_xpath('//table/tbody/tr[%d]/td' % i)
+			run_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
+			link = run_link.get_attribute("href").split("/")
+			user = Profile()
+			user.user_id = link[len(link)-2]
+			user.name   = (run[0].text.encode('utf-8').strip() if run[0].text.encode('utf-8').strip() else "")
+			user.alias  = (run[1].text.encode('utf-8').strip() if run[1].text.encode('utf-8').strip() else "")
+			user.save()
+	except:
+		print "Error %d" % page
 
 def get_all_prizes():
 	browser.get('https://gamesdonequick.com/tracker/prizes')

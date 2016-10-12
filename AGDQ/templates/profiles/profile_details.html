@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{{ event.name }} -- AGDQ
+{{ donor.name }} -- AGDQ
 {% endblock %}
 
 {% block body %}
@@ -9,14 +9,14 @@
 
 <div class="container-fluid">
 	<h2 class="text-center">
-		mundungu
+		{{donor.name}} &mdash; {{donor.alias}}
 		<br/>
 		<small>
 			Total Donations:
-			$20.00 (1)
+			$??.?? (?)
 			&mdash;
 			Max/Avg Donation:
-			$20.00/$20.00
+			$??.??/$??.??
 		</small>
 	</h2>
 	<table class="table table-condensed table-striped small">
