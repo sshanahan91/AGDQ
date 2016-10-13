@@ -46,9 +46,9 @@
 
 	</table>
 	<p class="text-center larger">
-		{% if "1" != current_page %}
+
 		<a href="?page=1" class="first"><span>&lt;&lt; </span></a>
-		{% endif%}
+
 
 		{% for page in page_range %}
 		{% if page == current_page %}
@@ -58,30 +58,10 @@
 		{% endif %}
 		{% endfor %}
 
-		{% if pages.num_pages != current_page %}
-		<a href="?page={{pages.num_pages}}" class="last"><span>&gt;&gt; </span></a>
-		{% endif %}
-	</p>
-	<div class="text-center">
-		<form action="" method="get">
-			<label for="page">
-				Page
-			</label>
-			<select name="page">
-				<option selected="selected">1</option>
-				<option>2</option>
-				<option>2</option>
-				<option>2</option>
-				<option>2</option>
-				<option>2</option>
-				<option>2</option>
-				<option>2</option>
 
-			</select>
-			<label for="sort">of 2067</label>
-			<input class="btn btn-primary btn-sm" type="submit" value="Go"/>
-		</form>
-	</div>
+		<a href="?page={{pages.num_pages}}" class="last"><span>&gt;&gt; </span></a>
+
+	</p>
 	<p class="text-center extra-spacing"><a href="/tracker/" class="btn btn-default">
 		Back to Main Index</a></p>
 	</div>
