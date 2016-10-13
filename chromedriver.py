@@ -320,6 +320,18 @@ def get_runners(runners_webelem):
 	#  information concatenated.
 	return [final.strip() for final in runners_webelem.text.encode('utf-8').split(',')]
 
+def make_tags():
+	tags = ['Boss Mode','Any%','Low%','100%','Race', \
+	'2p','4p','8p','New Game+','Blindfolded','TAS',  \
+	'Good Ending','Bad Ending','Glitched','4p','4p', \
+	'Hard Mode','Best Ending','Warpless']
+
+	for tag in tags:
+		print "Made tag %s" % tag
+		# new_tag = Tag(tag_id=tag)
+		# new_tag.save()
+
+
 def get_tags(description, title):
 	text = description.text.encode('utf-8').strip().lower() + title.text.encode('utf-8').strip().lower()
 	tag_list = []
@@ -384,11 +396,14 @@ def get_tags(description, title):
 	return tag_list
 
 #get_all_events()
-get_all_users()
+# get_all_users()
 
 # without event_ids as an array, event_id not saved with data
 # without users first, cant search for players based on name
-#get_runs_by_event()
+make_tags()
+
+for event in Event.objects.all():
+	get_runs_by_event(event.event_id)
 
 #
 #get_all_prizes()
