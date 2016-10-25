@@ -14,6 +14,7 @@ def index(request):
 		donors = paginator.page(page)
 	except PageNotAnInteger:
 		donors = paginator.page(1)
+		page = 1
 	except EmptyPage:
 		donors = paginator.page(paginator.num_pages)
 	

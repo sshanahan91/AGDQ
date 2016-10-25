@@ -322,9 +322,9 @@ def get_runners(runners_webelem):
 
 def make_tags():
 	tags = ['Boss Mode','Any%','Low%','100%','Race', \
-	'2p','4p','8p','New Game+','Blindfolded','TAS',  \
-	'Good Ending','Bad Ending','Glitched','4p','4p', \
-	'Hard Mode','Best Ending','Warpless']
+			'2p','4p','8p','New Game+','Blindfolded','TAS',  \
+			'Good Ending','Bad Ending','Glitched', \
+			'Co-Op','1p2c', 'Hard Mode','Best Ending','Warpless']
 
 	for tag in tags:
 		print "Made tag %s" % tag
@@ -379,10 +379,10 @@ def get_tags(description, title):
 		tag_list.append('Glitched')
 
 	if ('coop' in text) or ('co-op' in text):
-		tag_list.append('4p')
+		tag_list.append('Co-Operative')
 
 	if ('1p2c' in text) or ('1 player, 2 controllers' in text):
-		tag_list.append('4p')
+		tag_list.append('1 player, 2 controllers')
 
 	if 'hard mode' in text:
 		tag_list.append('Hard Mode')
