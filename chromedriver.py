@@ -10,6 +10,7 @@ from datetime import datetime
 import re
 from events.models import Event
 from profiles.models import Profile
+from runs.models import Run, Tag
 
 
 
@@ -50,7 +51,7 @@ def get_runs_by_event(event = None):
 		# show list as a string seperated by slashes.
 			print "runners:      " + "/".join(runners)
 		print "description:  " + run[2].text.encode('utf-8').strip()
-		tags = get_tags(run[2], run[0])
+		tags = get_tags(run[2], run[0], link[len(link)-1])
 		if tags:
 			print "tags:         " + "/".join(tags)
 		print ""
@@ -314,7 +315,7 @@ def get_donation_bids_by_choice(choice_ids = []):
 			print "donation_id:   " + link[len(link)-1]
 			print ""
 
-ooojmk
+
 def get_runners(runners_webelem):
 	# "None" still considered a runner. " and " still gives runner
 	#  information concatenated.
@@ -328,79 +329,96 @@ def make_tags():
 
 	for tag in tags:
 		print "Made tag %s" % tag
-		# new_tag = Tag(tag_id=tag)
-		# new_tag.save()
+		new_tag = Tag(name=tag)
+		new_tag.save()
 
 
-def get_tags(description, title, ):
+def get_tags(description, title, run_id):
 	text = description.text.encode('utf-8').strip().lower() + title.text.encode('utf-8').strip().lower()
-	tag_list = []
+	run = Run.objects.get(run_id=run_id)
 
 	if 'boss' in text:
-		tag_list.append('Boss Mode')
+		tag = Tag.objects.get(name='Boss Mode')
+		run.tags.add(tag)
 
 	if ('any%' in text) or ('any %' in text):
-		tag_list.append('Any%')
+		tag = Tag.objects.get(name='Any%')
+		run.tags.add(tag)
 
 	if ('low%' in text) or ('low %' in text):
-		tag_list.append('Low%')
+		tag = Tag.objects.get(name='Low%')
+		run.tags.add(tag)
 
 	if ('100%' in text) or ('100 %' in text):
-		tag_list.append('100%')
+		tag = Tag.objects.get(name='100%')
+		run.tags.add(tag)
 
 	if 'race' in text:
-		tag_list.append('Race')
+		tag = Tag.objects.get(name='Race')
+		run.tags.add(tag)
 
 	if ('2p' in text) or ('2 player' in text) or ('2 way' in text):
-		tag_list.append('2p')
+		tag = Tag.objects.get(name='2p')
+		run.tags.add(tag)
 
 	if ('4p' in text) or ('4 player' in text) or ('4 way' in text):
-		tag_list.append('4p')
+		tag = Tag.objects.get(name='4p')
+		run.tags.add(tag)
 
 	if ('8p' in text) or ('8 player' in text) or ('8 way' in text):
-		tag_list.append('8p')
+		tag = Tag.objects.get(name='8p')
+		run.tags.add(tag)
 
 	if ('ng+' in text) or ('new game+' in text) or ('new game +' in text):
-		tag_list.append('New Game+')
+		tag = Tag.objects.get(name='New Game+')
+		run.tags.add(tag)
 
 	if ('blindfold' in text):
-		tag_list.append('Blindfolded')
+		tag = Tag.objects.get(name='Blindfolded')
+		run.tags.add(tag)
 
 	if ('tasbot' in text) or (' tas ' in text):
-		tag_list.append('TAS')
+		tag = Tag.objects.get(name='TAS')
+		run.tags.add(tag)
 
 	if 'good end' in text:
-		tag_list.append('Good Ending')
+		tag = Tag.objects.get(name='Good Ending')
+		run.tags.add(tag)
 
 	if 'bad end' in text:
-		tag_list.append('Bad Ending')
+		tag = Tag.objects.get(name='Bad Ending')
+		run.tags.add(tag)
 
 	if 'glitch' in text:
-		tag_list.append('Glitched')
+		tag = Tag.objects.get(name='Glitched')
+		run.tags.add(tag)
 
 	if ('coop' in text) or ('co-op' in text):
-		tag_list.append('Co-Operative')
+		tag = Tag.objects.get(name='Co-Operative')
+		run.tags.add(tag)
 
 	if ('1p2c' in text) or ('1 player, 2 controllers' in text):
-		tag_list.append('1 player, 2 controllers')
+		tag = Tag.objects.get(name='1 player, 2 controllers')
+		run.tags.add(tag)
 
 	if 'hard mode' in text:
-		tag_list.append('Hard Mode')
+		tag = Tag.objects.get(name='Hard Mode')
+		run.tags.add(tag)
 
 	if ('best end' in text) or ('true end' in text):
-		tag_list.append('Best Ending')
+		tag = Tag.objects.get(name='Best Ending')
+		run.tags.add(tag)
 
 	if ('no warp' in text) or ('warpless' in text):
-		tag_list.append('Warpless')
-
-	return tag_list
+		tag = Tag.objects.get(name='Warpless')
+		run.tags.add(tag)
 
 #get_all_events()
 # get_all_users()
 
 # without event_ids as an array, event_id not saved with data
 # without users first, cant search for players based on name
-make_tags()
+#make_tags()
 
 for event in Event.objects.all():
 	get_runs_by_event(event.event_id)
