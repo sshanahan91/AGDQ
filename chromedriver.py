@@ -36,25 +36,20 @@ def get_runs_by_event(event = None):
 		run = browser.find_elements_by_xpath('//table/tbody/tr[%d]/td' % i)
 		run_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
 		link = run_link.get_attribute("href").split("/")
-		print "run_id:       " + link[len(link)-1]
-		print "event_id:     " + (event if event else "")
-		print "name:         " + run[0].text.encode('utf-8').strip()
-		print "started_at:   " + run[3].text.encode('utf-8').strip()
-		print "ended_at:     " + run[4].text.encode('utf-8').strip()
-		print "bid_war:      " + run[5].text.encode('utf-8').strip()
-		print "game:         " + "--added later--"
-		print "youtube_link: " + "--added later--"
 
-		# split full runner text by comma, remove all white space
-		runners = get_runners(run[1])
-		if runners:
-		# show list as a string seperated by slashes.
-			print "runners:      " + "/".join(runners)
-		print "description:  " + run[2].text.encode('utf-8').strip()
-		tags = get_tags(run[2], run[0], link[len(link)-1])
-		if tags:
-			print "tags:         " + "/".join(tags)
-		print ""
+		runObj = Run()
+		runObj.run_id       = link[len(link)-1]
+		runObj.event_id     = (event if event else "")
+		runObj.name         = run[0].text.encode('utf-8').strip()
+		runObj.game         = "--added later--"
+		runObj.description  = run[2].text.encode('utf-8').strip()
+		runObj.started_at   = run[3].text.encode('utf-8').strip()
+		runObj.ended_at     = run[4].text.encode('utf-8').strip()
+		runObj.youtube_link = "--added later--"
+		runObj.save()
+
+		get_runners(run[1], link[len(link)-1])
+		get_tags(run[2], run[0], link[len(link)-1])
 
 
 # Events
