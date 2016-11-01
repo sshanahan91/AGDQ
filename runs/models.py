@@ -1,8 +1,13 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from profiles.models import Profile
 
 # Create your models here.
+
+class Tag(models.Model):
+	name         = models.CharField(max_length = 150, primary_key=True)
+
 class Run(models.Model):
 	run_id       = models.CharField(max_length = 15, primary_key=True)
 	event_id     = models.CharField(max_length = 15)
@@ -11,10 +16,9 @@ class Run(models.Model):
 	description  = models.CharField(max_length = 1500)
 	started_at   = models.DateTimeField()
 	ended_at     = models.DateTimeField()
-
-class Tag(models.Model):
-	runs         = models.ManyToManyField(Run)
-	name         = models.CharField(max_length = 150, primary_key=True)
+	youtube_link = models.CharField(max_length = 150)
+	tags         = models.ManyToManyField(Tag)
+	runners      = models.ManyToManyField(Profile)
 
 # Run_id -> primary key
 # Event_id -> foreign key

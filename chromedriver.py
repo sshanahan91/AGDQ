@@ -314,7 +314,7 @@ def get_donation_bids_by_choice(choice_ids = []):
 			print "donation_id:   " + link[len(link)-1]
 			print ""
 
-
+ooojmk
 def get_runners(runners_webelem):
 	# "None" still considered a runner. " and " still gives runner
 	#  information concatenated.
@@ -332,7 +332,7 @@ def make_tags():
 		# new_tag.save()
 
 
-def get_tags(description, title):
+def get_tags(description, title, ):
 	text = description.text.encode('utf-8').strip().lower() + title.text.encode('utf-8').strip().lower()
 	tag_list = []
 
