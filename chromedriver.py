@@ -37,6 +37,9 @@ def get_runs_by_event(event = None):
 		run_link = browser.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[%d]/td[1]/a' % i)
 		link = run_link.get_attribute("href").split("/")
 
+		if run[0].text.encode('utf-8').strip() == "Total:":
+			continue
+
 		runObj = Run()
 		runObj.run_id       = link[len(link)-1]
 		runObj.event_id     = (event if event else "")
@@ -46,10 +49,10 @@ def get_runs_by_event(event = None):
 		runObj.started_at   = run[3].text.encode('utf-8').strip()
 		runObj.ended_at     = run[4].text.encode('utf-8').strip()
 		runObj.youtube_link = "--added later--"
-		runObj.save()
+		#runObj.save()
 
 		get_runners(run[1], link[len(link)-1])
-		get_tags(run[2], run[0], link[len(link)-1])
+		#get_tags(run[2], run[0], link[len(link)-1])
 
 
 # Events
@@ -311,10 +314,100 @@ def get_donation_bids_by_choice(choice_ids = []):
 			print ""
 
 
-def get_runners(runners_webelem):
-	# "None" still considered a runner. " and " still gives runner
-	#  information concatenated.
-	return [final.strip() for final in runners_webelem.text.encode('utf-8').split(',')]
+def get_runners(runners_webelem, run_id):
+
+	runner_names = [final.strip() for final in runners_webelem.text.encode('utf-8').split(',')]
+
+	for each_runner in runner_names:
+		if ' or ' in each_runner.lower():
+			first, second = each_runner.split(' or ')
+			runner_names.remove(each_runner)
+			runner_names.append(first)
+			runner_names.append(second)
+
+	for each_runner in runner_names:
+		if ' vs ' in each_runner.lower():
+			first, second = each_runner.split(' vs ')
+			runner_names.remove(each_runner)
+			runner_names.append(first)
+			runner_names.append(second)
+
+	for each_runner in runner_names:
+		if ' vs. ' in each_runner.lower():
+			if each_runner.count(' vs. ') == 1:
+				first, second = each_runner.split(' vs. ')
+			if each_runner.count(' vs. ') == 2:
+				first, second, third = each_runner.split(' vs. ')
+			runner_names.remove(each_runner)
+			runner_names.append(first)
+			runner_names.append(second)
+			try:
+				if third:
+					runner_names.append(third)
+			except:
+				third = 0 #doesnt exist
+
+	for each_runner in runner_names:
+		if ' and ' in each_runner.lower():
+			first, second = each_runner.split(' and ')
+			runner_names.remove(each_runner)
+			runner_names.append(first)
+			runner_names.append(second)
+
+	for each_runner in runner_names:
+		if ' & ' in each_runner.lower():
+			first, second = each_runner.split(' & ')
+			runner_names.remove(each_runner)
+			runner_names.append(first)
+			runner_names.append(second)
+
+	for each_runner in runner_names:
+		if ' vs. ' in each_runner.lower():
+			if each_runner.count(' vs. ') == 1:
+				first, second = each_runner.split(' vs. ')
+			if each_runner.count(' vs. ') == 2:
+				first, second, third = each_runner.split(' vs. ')
+			runner_names.remove(each_runner)
+			runner_names.append(first)
+			runner_names.append(second)
+			try:
+				if third:
+					runner_names.append(third)
+			except:
+				third = 0 #doesnt exist
+
+	if 'None' in runner_names:
+		runner_names.remove('None')
+	if '' in runner_names:
+		runner_names.remove('')
+
+	for each_runner in runner_names:
+		intital_ref = each_runner
+		if each_runner.startswith('and '):
+			each_runner = each_runner[4:]
+		if each_runner.startswith('maybe '):
+			each_runner = each_runner[6:]
+		if each_runner.startswith('any% by '):
+			each_runner = each_runner[8:]
+		if each_runner.startswith('everyone'):
+			runner_names.remove(each_runner)
+		if each_runner.startswith('or '):
+			each_runner = each_runner[3:]
+		if each_runner.endswith('.'):
+			each_runner = each_runner[:-1]
+		if intital_ref != each_runner:
+			runner_names.append(each_runner)
+			runner_names.remove(intital_ref)
+
+	for each_runner in runner_names:
+		if ' and ' in each_runner.lower():
+			first, second = each_runner.split(' and ')
+			runner_names.remove(each_runner)
+			runner_names.append(first)
+			runner_names.append(second)
+	for each_runner in runner_names:
+		print run_id + ": " + each_runner
+	print "------"
 
 def make_tags():
 	tags = ['Boss Mode','Any%','Low%','100%','Race', \
@@ -415,9 +508,9 @@ def get_tags(description, title, run_id):
 # without users first, cant search for players based on name
 #make_tags()
 
-for event in Event.objects.all():
-	get_runs_by_event(event.event_id)
-
+# for event in Event.objects.all():
+# 	get_runs_by_event(event.event_id)
+get_runs_by_event('sgdq2013')
 #
 #get_all_prizes()
 
