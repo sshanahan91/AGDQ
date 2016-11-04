@@ -8,6 +8,7 @@ django.setup()
 
 from datetime import datetime
 import re
+from django.db.models import Q
 from events.models import Event
 from profiles.models import Profile
 from runs.models import Run, Tag
@@ -317,6 +318,7 @@ def get_donation_bids_by_choice(choice_ids = []):
 def get_runners(runners_webelem, run_id):
 
 	runner_names = [final.strip() for final in runners_webelem.text.encode('utf-8').split(',')]
+	run = Run.objects.get(run_id=run_id)
 
 	for each_runner in runner_names:
 		if ' or ' in each_runner.lower():
@@ -405,9 +407,17 @@ def get_runners(runners_webelem, run_id):
 			runner_names.remove(each_runner)
 			runner_names.append(first)
 			runner_names.append(second)
-	for each_runner in runner_names:
-		print run_id + ": " + each_runner
-	print "------"
+
+	# for each_runner in runner_names:
+	# 	try:
+	# 		user = Profile.objects.get(Q(name__iexact=each_runner) | 
+ #                               Q(alias__iexact=each_runner))
+	# 		run.runners.add(user)
+	# 	except:
+	# 		new_runner = Profile.objects.create(name=each_runner, alias=each_runner)
+	# 		run.runners.add(new_runner)
+			
+
 
 def make_tags():
 	tags = ['Boss Mode','Any%','Low%','100%','Race', \
@@ -508,9 +518,9 @@ def get_tags(description, title, run_id):
 # without users first, cant search for players based on name
 #make_tags()
 
-# for event in Event.objects.all():
-# 	get_runs_by_event(event.event_id)
-get_runs_by_event('sgdq2013')
+for event in Event.objects.all():
+	get_runs_by_event(event.event_id)
+# get_runs_by_event('sgdq2013')
 #
 #get_all_prizes()
 
