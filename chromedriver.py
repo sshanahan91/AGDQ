@@ -407,7 +407,7 @@ def get_runners(runners_webelem, run_id):
 			runner_names.remove(each_runner)
 			runner_names.append(first)
 			runner_names.append(second)
-
+Figure out a better pattern for user_id below
 	# for each_runner in runner_names:
 	# 	try:
 	# 		user = Profile.objects.get(Q(name__iexact=each_runner) | 
